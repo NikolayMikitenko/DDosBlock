@@ -1,0 +1,70 @@
+version: '3.6'
+services:
+
+  bind:
+    image: sameersbn/bind:9.16.1-20200524
+    networks:
+      ddos:
+        ipv4_address: 192.168.56.2
+    ports:
+    - 53:53/udp
+    - 53:53/tcp
+    - 10000:10000/tcp
+    volumes:
+    - ./bind:/data
+
+  app:
+    build:
+      context: app
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      # - ddos
+      ddos:
+        ipv4_address: 192.168.56.3
+
+  nginx:
+    image: nginx:latest
+    depends_on:
+      - app
+    ports:
+     - 80:80
+    networks:
+      # - ddos
+      ddos:
+        ipv4_address: 192.168.56.4
+    volumes:
+      - ./nginx/favicon.ico:/usr/share/nginx/html/favicon.ico
+      - ./nginx/nginx_0.conf:/etc/nginx/nginx.conf
+      #- ./nginx/nginx_1.conf:/etc/nginx/nginx.conf
+      #- ./nginx/nginx_2.conf:/etc/nginx/nginx.conf
+      #- ./nginx/nginx_3.conf:/etc/nginx/nginx.conf
+      #- ./nginx/nginx_4.conf:/etc/nginx/nginx.conf
+
+  # ddos:
+  #   #image: utkudarilmaz/hping3:latest
+  #   image: sflow/hping3:latest
+  #   command: "--flood nginx -p 80"
+  #   depends_on:
+  #     - nginx
+
+  ddos:
+    build:
+      context: hping
+      dockerfile: Dockerfile
+    depends_on:
+      - nginx  
+    networks:
+      # - ddos
+      ddos:
+        ipv4_address: 192.168.56.5
+    command: "hping3 -1 --flood www.condelnet.com -p 80"
+
+networks:
+  ddos:
+    driver: bridge
+    ipam:
+     config:
+     - subnet: 192.168.56.0/24
+       gateway: 192.168.56.1

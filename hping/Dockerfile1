@@ -1,0 +1,3 @@
+FROM utkudarilmaz/hping3:latest 
+
+CMD ["app", "-p", "5000"]

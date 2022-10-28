@@ -1,0 +1,8 @@
+view "World" {
+    match-clients {"any"; };
+    recursion no;
+    zone "condelnet.com" {
+        type master;
+        file "/var/lib/bind/condelnet.com.hosts";
+    };
+};

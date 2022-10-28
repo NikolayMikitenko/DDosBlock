@@ -1,13 +1,13 @@
 # DDosBlock 
 
 ## Prepare
-Change nginx conf file in docker-compose.yml and see DDos attacks and nginx blocks results: 
-From: nginx_0.conf
-To: 
-    - nginx_1.conf - limit request per second from one IP
-    - nginx_2.conf - limit sessions quantity from one IP
-    - nginx_3.conf - limit swnd data time
-    - nginx_4.conf - limit upstream connections
+Change nginx conf file in docker-compose.yml and see DDos attacks and nginx blocks results:  
+From: nginx_0.conf 
+To:  
+    - nginx_1.conf - limit request per second from one IP 
+    - nginx_2.conf - limit sessions quantity from one IP 
+    - nginx_3.conf - limit swnd data time 
+    - nginx_4.conf - limit upstream connections 
 
 ## Run
 Run every time for rebuild and restart containers
